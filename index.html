@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acak Gambar</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100 flex flex-col items-center justify-center min-h-screen">
+<div class="bg-white p-6 rounded-lg shadow-lg w-96 text-center">
+    <h2 class="text-lg font-semibold mb-4">Upload Gambar</h2>
+    <input type="file" id="fileInput" multiple accept="image/*" class="mb-4 p-2 border rounded w-full">
+    <button onclick="shuffleImages()" class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Acak Gambar</button>
+    <h3 class="text-md font-medium mt-4">Gambar Terpilih:</h3>
+    <div id="loading" class="mt-4 text-gray-500 hidden">⏳ Mengacak...</div>
+    <img id="selectedImage" class="mt-4 w-48 h-48 object-cover rounded shadow hidden" alt="Gambar Terpilih">
+</div>
+
+<script>
+    let images = [];
+    
+    document.getElementById('fileInput').addEventListener('change', function(event) {
+        images = [];
+        const files = Array.from(event.target.files);
+
+        if (files.length === 0) {
+            alert("Silakan unggah setidaknya satu gambar.");
+            return;
+        }
+
+        files.forEach(file => {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                images.push(e.target.result);
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+
+    function shuffleImages() {
+        if (images.length === 0) {
+            alert("Silakan unggah gambar terlebih dahulu.");
+            return;
+        }
+
+        document.getElementById('selectedImage').classList.add("hidden");
+        document.getElementById('loading').classList.remove("hidden");
+
+        setTimeout(() => {
+            const randomIndex = Math.floor(Math.random() * images.length);
+            document.getElementById('selectedImage').src = images[randomIndex];
+            document.getElementById('selectedImage').classList.remove("hidden");
+            document.getElementById('loading').classList.add("hidden");
+        }, Math.random() * 1000 + 1000); // Delay antara 1-2 detik
+    }
+</script>
+</body>
+</html>
